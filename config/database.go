@@ -15,7 +15,7 @@ var dbPool *pgxpool.Pool
 func ConnectDB() {
 	err := godotenv.Load("../.env")
 	if err != nil {
-		log.Fatal("error loading .env file")
+		log.Fatal("error loading .env file:", err)
 	}
 
 	dbUser := os.Getenv("DB_USER")
@@ -25,17 +25,20 @@ func ConnectDB() {
 	dbPort := os.Getenv("DB_PORT")
 
 	connString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", dbUser, dbPassword, dbHost, dbPort, dbName)
+	fmt.Println("Attempting to connect to database with connection string:", connString)
 
 	dbPool, err = pgxpool.New(context.Background(), connString)
 	if err != nil {
-		log.Fatal("error connecting database:", err)
+		log.Fatal("error connecting to database:", err)
 	} else {
-		fmt.Println("connected to database successfully")
+		fmt.Println("Successfully connected to database")
 	}
-
 }
 
 func GetDB() *pgxpool.Pool {
+	if dbPool == nil {
+		log.Fatal("database connection is nil")
+	}
 	return dbPool
 }
 

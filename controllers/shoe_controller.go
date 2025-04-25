@@ -68,7 +68,7 @@ func UpdateShoe(c *gin.Context) {
 		return
 	}
 
-	query := `UPDATE shoes SET name=$1, size=$2, brand=$3, quantity=$4, price=$5 WHERE id=$6`
+	query := `UPDATE shoes SET name=$1, size=$2, quantity=$4, price=$5 WHERE id=$6`
 
 	cmdTag, err := config.GetDB().Exec(context.Background(), query,
 		shoe.Name, shoe.Size, shoe.Quantity, shoe.Price, id,
